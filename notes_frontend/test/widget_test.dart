@@ -3,16 +3,23 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:notes_frontend/main.dart';
 
 void main() {
-  testWidgets('App generation message displayed', (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp());
+  testWidgets('Main screen should display AppBar and FAB', (WidgetTester tester) async {
+    await tester.pumpWidget(const NotesApp());
 
-    expect(find.text('notes_frontend App is being generated...'), findsOneWidget);
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    // Should find the search app bar, the floating action button, and bottom navigation bar.
+    expect(find.byType(AppBar), findsOneWidget);
+    expect(find.byType(FloatingActionButton), findsOneWidget);
+    expect(find.byType(BottomNavigationBar), findsOneWidget);
   });
 
-  testWidgets('App bar has correct title', (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp());
+  testWidgets('FAB opens note editor (route navigation)', (WidgetTester tester) async {
+    await tester.pumpWidget(const NotesApp());
 
-    expect(find.text('notes_frontend'), findsOneWidget);
+    // Tap the FloatingActionButton.
+    await tester.tap(find.byType(FloatingActionButton));
+    await tester.pumpAndSettle();
+    // The New Note page should show a title field.
+    expect(find.text('New Note'), findsOneWidget);
+    expect(find.byType(TextFormField), findsWidgets);
   });
 }
