@@ -47,18 +47,19 @@ class NoteDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Note'),
-        backgroundColor: theme.colorScheme.primary,
+        backgroundColor: theme.appBarTheme.backgroundColor ?? theme.colorScheme.primary,
         actions: [
           IconButton(
-            icon: const Icon(Icons.edit),
+            icon: Icon(Icons.edit, color: theme.iconTheme.color),
             tooltip: 'Edit',
             onPressed: () => onEdit(note),
           ),
           IconButton(
-            icon: const Icon(Icons.delete_outline, color: Colors.red),
+            icon: Icon(Icons.delete_outline, color: Colors.red[isDark ? 200 : 600]),
             tooltip: 'Delete',
             onPressed: () => _confirmDelete(context),
           ),
@@ -90,7 +91,7 @@ class NoteDetailPage extends StatelessWidget {
                   "Last updated: ${_formatDate(note.updatedAt)}",
                   style: theme.textTheme.bodySmall?.copyWith(
                     fontStyle: FontStyle.italic,
-                    color: Colors.grey[600],
+                    color: isDark ? Colors.grey[400] : Colors.grey[600],
                   ),
                 ),
               ],

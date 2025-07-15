@@ -50,11 +50,12 @@ class _NoteEditPageState extends State<NoteEditPage> {
   Widget build(BuildContext context) {
     final isEditing = widget.note != null;
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(isEditing ? 'Edit Note' : 'New Note'),
-        backgroundColor: theme.colorScheme.primary,
+        backgroundColor: theme.appBarTheme.backgroundColor ?? theme.colorScheme.primary,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
@@ -66,10 +67,12 @@ class _NoteEditPageState extends State<NoteEditPage> {
                 key: const Key("noteTitle"),
                 controller: _titleController,
                 style: theme.textTheme.titleMedium,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Title',
                   border: OutlineInputBorder(),
                   floatingLabelBehavior: FloatingLabelBehavior.always,
+                  filled: true,
+                  fillColor: isDark ? const Color(0xFF23262B) : Colors.grey[50],
                 ),
                 maxLength: 64,
                 validator: (value) =>
@@ -84,9 +87,11 @@ class _NoteEditPageState extends State<NoteEditPage> {
                   key: const Key("noteContent"),
                   controller: _contentController,
                   style: theme.textTheme.bodyMedium,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'Content',
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
+                    filled: true,
+                    fillColor: isDark ? const Color(0xFF23262B) : Colors.grey[50],
                   ),
                   maxLines: null,
                   expands: true,
@@ -102,6 +107,10 @@ class _NoteEditPageState extends State<NoteEditPage> {
                   icon: Icon(isEditing ? Icons.save : Icons.add),
                   label: Text(isEditing ? 'Save Changes' : 'Create Note'),
                   onPressed: _isSaving ? null : _saveNote,
+                  style: FilledButton.styleFrom(
+                    backgroundColor: theme.colorScheme.primary,
+                    foregroundColor: Colors.white,
+                  ),
                 ),
               ),
             ],
